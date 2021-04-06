@@ -67,8 +67,12 @@ def test_post_car_rating_should_succeed(client) -> None:
 
 
 def test_get_popular_cars_should_succeed_and_order(client) -> None:
-    test_car1: Car = Car.objects.create(make="Volkswagen", model="Golf", rating=3)
-    test_car2: Car = Car.objects.create(make="Volkswagen", model="Golf", rating=4)
+    test_car1: Car = Car.objects.create(
+        make="Volkswagen", model="Golf", rating=3, rating_count=3
+    )
+    test_car2: Car = Car.objects.create(
+        make="Volkswagen", model="Golf", rating=4, rating_count=4
+    )
     response = client.get(popular_cars)
     content = json.loads(response.content)
     assert response.status_code == 200
