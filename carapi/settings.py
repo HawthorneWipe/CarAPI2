@@ -73,7 +73,7 @@ REST_FRAMEWORK = {
     # ]
 }
 
-ROOT_URLCONF = "restapjwt.urls"
+ROOT_URLCONF = "carapi.urls"
 
 TEMPLATES = [
     {
@@ -91,7 +91,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "restapjwt.wsgi.application"
+WSGI_APPLICATION = "carapi.wsgi.application"
 
 
 # Database
