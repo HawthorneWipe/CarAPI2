@@ -1,4 +1,5 @@
 from api.serializers import CarSerializer
+from rest_framework.exceptions import NotAcceptable
 from api.models import Car
 from rest_framework.decorators import api_view
 from rest_framework import status
@@ -51,3 +52,31 @@ def carspk(request, pk, format=None):
         return Response({"Error": "Car not found"}, status=status.HTTP_404_NOT_FOUND)
     car.delete()
     return Response({"Success": "Car deleted"}, status=status.HTTP_200_OK)
+
+
+@api_view(http_method_names=["POST"])
+def rate(request, format=None):
+    try:
+        car: Car = Car.objects.get(pk=request.data["car_id"])
+        ratecar = request.data["rating"]
+        print(ratecar)
+        car.rate_me(ratecar)
+        car.save()
+        return Response(
+            {f"Car {car.pk}, {car.make} {car.model} rated at ": f"{car.rating}"},
+            status=status.HTTP_200_OK,
+        )
+    except Car.DoesNotExist:
+        return Response({"Error": "Car not found."}, status=status.HTTP_404_NOT_FOUND)
+    except KeyError:
+        return Response(
+            {"Error": "The request should contain car_id and rating keys."},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+    except NotAcceptable:
+        return Response(
+            {"Error": "Rating should be between 1 and 5"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+    except Exception as e:
+        return Response({"Error": f"{e}"})
