@@ -1,4 +1,4 @@
-from api.serializers import CarSerializer
+from api.serializers import CarSerializer, CarSerializerRatingCount
 from rest_framework.exceptions import NotAcceptable
 from api.models import Car
 from rest_framework.decorators import api_view
@@ -80,3 +80,13 @@ def rate(request, format=None):
         )
     except Exception as e:
         return Response({"Error": f"{e}"})
+
+
+@api_view(http_method_names=["GET"])
+def carspopular(request, format=None):
+    cars = Car.objects.order_by("-rating_count").all()
+    if not cars:
+        return Response({"Message": "Empty database"})
+    serializer = CarSerializerRatingCount(cars, many=True)
+    print(serializer.data)
+    return Response(serializer.data)
