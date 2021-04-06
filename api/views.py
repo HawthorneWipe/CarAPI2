@@ -41,3 +41,13 @@ def cars(request, format=None):
                 {"Error": "Car was not found, can not add to database"},
                 status=status.HTTP_404_NOT_FOUND,
             )
+
+
+@api_view(http_method_names=["DELETE"])
+def carspk(request, pk, format=None):
+    try:
+        car = Car.objects.get(pk=pk)
+    except Car.DoesNotExist:
+        return Response({"Error": "Car not found"}, status=status.HTTP_404_NOT_FOUND)
+    car.delete()
+    return Response({"Success": "Car deleted"}, status=status.HTTP_200_OK)
