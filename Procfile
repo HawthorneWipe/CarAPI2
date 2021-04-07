@@ -1,2 +1,2 @@
 release: python manage.py migrate
-web: gunicorn restapjwt.wsgi
+web: gunicorn carapi.wsgi
