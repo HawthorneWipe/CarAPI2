@@ -1,0 +1,20 @@
+version: "3.9"
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: web/dockerfile
+    command: gunicorn carapi.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - .:/usr/src/app/
+    expose:
+      - 8000
+    env_file:
+      - ./.env
+  nginx:
+    build: ./nginx
+    ports:
+      - 1337:80
+    depends_on:
+      - web
